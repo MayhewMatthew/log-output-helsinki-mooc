@@ -8,8 +8,6 @@
 #include <thread>
 #include <ctime>
 
-
-//test
 //Namespace definition
 using namespace std;
 
