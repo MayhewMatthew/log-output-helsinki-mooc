@@ -1,5 +1,4 @@
 #getting Ubuntu image and Node version
-FROM ubuntu:20.04
 FROM node:18 AS build
 
 #Installing the compiler module
@@ -23,11 +22,14 @@ RUN npm run build
 #Serving the app with Nginx
 FROM nginx:alpine
 
+#Installing gettext for envsubst (substituting env variables)
+RUN apk add --no-cache gettext
+
 #Copy built assets from the previous stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
 #Copying Nginx config files
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
 #Expose the app port
 EXPOSE 80
@@ -36,5 +38,4 @@ EXPOSE 80
 RUN g++ -o main main.cpp
 
 #running the code when the container is initialized
-CMD ["nginx", "-g","daemon off"]
-
+CMD ["/bin/sh", "-c", "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;' & ./usr/share/nginx/html/main"]
