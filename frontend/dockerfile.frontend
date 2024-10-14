@@ -29,5 +29,8 @@ CMD /bin/sh -c "envsubst '\$NGINX_CONTAINER_PORT' < etc/nginx/nginx.conf.templat
 #Exposing the container port to allow communication.
 EXPOSE ${NGINX_CONTAINER_PORT} 
 
+#Echoing the port, as requested.
+ENTRYPOINT ["/bin/sh", "-c", "echo Server started at port ${NGINX_CONTAINER_PORT}" ]
+
 
 
