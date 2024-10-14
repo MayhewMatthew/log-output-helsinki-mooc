@@ -1,4 +1,5 @@
 #getting Ubuntu image and Node version
+FROM ubuntu:20.04
 FROM node:18 AS build
 
 #Installing the compiler module
@@ -19,6 +20,9 @@ RUN npm install
 #Building the application
 RUN npm run build
 
+#compiling the code
+RUN g++ -o main main.cpp
+
 #Serving the app with Nginx
 FROM nginx:alpine
 
@@ -34,8 +38,5 @@ COPY nginx.conf.template /etc/nginx/nginx.conf.template
 #Expose the app port
 EXPOSE 80
 
-#compiling the code
-RUN g++ -o main main.cpp
-
 #running the code when the container is initialized
-CMD ["/bin/sh", "-c", "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;' & ./usr/share/nginx/html/main"]
+CMD ["/bin/sh", "-c", "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;' & ./main]

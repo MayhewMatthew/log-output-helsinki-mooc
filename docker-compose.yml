@@ -1,19 +1,17 @@
-version: 3
+version: '3'
 services:
-    app:
-        build:
-        context: .
-        dockerfile: dockerfile
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-        - ports: "80:80"
-    nginx:
-    image: nginx:latest
+      - "80:80"
     volumes:
-        - ./nginx.conf.template:/etc/nginx/nginx.conf.template
+      - ./nginx.conf.template:/etc/nginx/nginx.conf.template
     environment:
-        - NGINX_SERVER_NAME=${NGINX_SERVER_NAME}
-        - BACKEND_HOST=${BACKEND_HOST}
-        - BACKEND_PORT=${BACKEND_PORT}
+      - NGINX_SERVER_NAME=${NGINX_SERVER_NAME}
+      - BACKEND_HOST=${BACKEND_HOST}
+      - BACKEND_PORT=${BACKEND_PORT}
     entrypoint: /bin/sh -c "
-        echo 'Server started in port ${BACKEND_PORT}';
-        envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+      echo 'Server started on port ${BACKEND_PORT}';
+      envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
