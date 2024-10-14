@@ -1,0 +1,22 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    ports:
+      - "${NGINX_HOST_PORT}:${NGINX_CONTAINER_PORT}"
+    depends_on:
+      - backend
+    environment:
+      - NGINX_HOST_PORT = ${NGINX_HOST_PORT}
+      - NGINX_CONTAINER_PORT = ${NGINX_CONTAINER_PORT}
+
+    backend:
+      build:
+        context: ./backend
+        dockerfile: dockerfile
+    
+      #Allows the container to keep running and allows its logs (log-output) to be shown on the console.
+      tty: true
+      stdin_open: true

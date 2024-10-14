@@ -1,0 +1,23 @@
+#importing gcc image
+FROM gcc:latest AS cpp-build 
+
+#Setting the /app folder
+WORKDIR /app
+
+#Copying main.cpp to the workdir
+COPY main.cpp .
+
+#Running the compiler
+RUN g++ -o main main.cpp
+
+#Importing debian image
+FROM debian:buster-slim
+
+#Copying the compiled program
+COPY --from=cpp-build /app/main /app/main
+
+#Setting the workdir
+WORKDIR /app
+
+#Running the app
+CMD ["./main"]
