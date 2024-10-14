@@ -8,4 +8,6 @@ services:
         - NGINX_SERVER_NAME=${NGINX_SERVER_NAME}
         - BACKEND_HOST=${BACKEND_HOST}
         - BACKEND_PORT=${BACKEND_PORT}
-    entrypoint: /bin/sh -c "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    entrypoint: /bin/sh -c "
+        echo 'Server started in port ${BACKEND_PORT}';
+        envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
