@@ -15,7 +15,7 @@ COPY . .
 #Running npm build to build the static giles
 RUN npm run build
 
-#Importing the nginx image
+#Importing the nginx
 FROM nginx:alpine
 
 #Copying the build items to the html folder of nginx so it can serve the application
